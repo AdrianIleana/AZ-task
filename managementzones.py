@@ -27,16 +27,19 @@ class ManagementZones:
                 self.URL,
                 headers=self.header
             )
+
+            response.raise_for_status()
+
             if response.status_code == 200:
                 print(f"\nGET request status code is: {response.status_code}")
                 zones = response.json()
-                print(f"GET retrieved {len(zones['values'])} existing zones.\n")
-            else:
-                print(f"""An error has occurred
-                    Response status code is: {response.status_code}""")
+                print(f"GET retrieved {len(zones['values'])} existing zones.")
+        except HTTPError:
+            print(f"PUT failed with HTTPError: {response.content}\n")
+        except Exception as e:
+            print(f"PUT failed with exception: {e} \n")
+        finally:
             return zones
-        except requests.ConnectionError as e:
-            print(f"Error encountered {e}")
 
     def post_mz(self, new_data):
         url_validator = self.URL + "/validator"
@@ -57,7 +60,7 @@ class ManagementZones:
                     json=new_data,
                     headers=self.header
                 )
-                print(f"\nPOST request ran with response code: {post_req.status_code}")
+                print(f"POST request ran with response code: {post_req.status_code}")
                 print(f"POST request successfully created new management zone: {new_data['name']}")
         except HTTPError:
             print(f"PUT failed with HTTPError: {response_validator.content}\n")
@@ -83,15 +86,16 @@ class ManagementZones:
                     json=new_data,
                     headers=self.header
                 )
-                print(f"\nPUT request ran with response code: {put_req.status_code}")
+                print(f"PUT request ran with response code: {put_req.status_code}")
                 print(f"PUT request successfully updated management zone: {new_data['name']}")
         except HTTPError:
             print(f"PUT failed with HTTPError: {response_validator.content}\n")
         except Exception as e:
             print(f"PUT failed with exception: {e} \n")
 
-    def exists_in(self, name, zones):
-        for zone in zones:
+    def exists(self, name):
+        zones = self.get_mz()
+        for zone in zones['values']:
             if zone['name'] == name:
                 return zone
         return False

@@ -5,9 +5,9 @@ if __name__ == '__main__':
 
     mgmtZone = ManagementZones(file)
 
-    zones_from_dt = mgmtZone.get_mz()
-
+    # Iterate through all the teams defined in yaml file:
     for title in mgmtZone.Teams.keys():
+        # Generating payload for each management zone title:
         payload = dict()
         payload["name"] = title
         payload["rules"] = []
@@ -15,8 +15,12 @@ if __name__ == '__main__':
             for prefix in mgmtZone.Teams[title]["host-group-prefixes"]:
                 rule = mgmtZone.rule_gen(prefix)
                 payload["rules"].append(rule)
-        if mgmtZone.exists_in(title, zones_from_dt['values']):
-            zone = mgmtZone.exists_in(title, zones_from_dt['values'])
-            mgmtZone.put_mz(payload, zone['id'])
+
+        # Checking if management zone already exists:
+        existent = mgmtZone.exists(title)
+
+        # Initiate request accordingly:
+        if existent:
+            mgmtZone.put_mz(payload, existent['id'])
         else:
             mgmtZone.post_mz(payload)

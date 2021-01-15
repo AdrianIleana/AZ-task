@@ -12,3 +12,6 @@ teams:
     global-pcf-b:
         cost-center: ct-4291
         entity: ab-3
+    global-pcf-c:
+        cost-center: ct-4291
+        entity: ab-3
