@@ -20,6 +20,7 @@ class ManagementZones:
 
         self.Teams = self.config["teams"]
 
+    # GET Request function:
     def get_mz(self):
         zones = dict()
         try:
@@ -41,6 +42,7 @@ class ManagementZones:
         finally:
             return zones
 
+    # POST Request function:
     def post_mz(self, new_data):
         url_validator = self.URL + "/validator"
 
@@ -67,6 +69,7 @@ class ManagementZones:
         except Exception as e:
             print(f"PUT failed with exception: {e} \n")
 
+    # PUT Request function:
     def put_mz(self, new_data, mz_id):
         url_validator = self.URL + "/{}/validator".format(mz_id)
 
@@ -93,6 +96,7 @@ class ManagementZones:
         except Exception as e:
             print(f"PUT failed with exception: {e} \n")
 
+    # Check if existent management zone:
     def exists(self, name):
         zones = self.get_mz()
         for zone in zones['values']:
@@ -100,6 +104,7 @@ class ManagementZones:
                 return zone
         return False
 
+    # Payload rule generator:
     def rule_gen(self, prefix):
         rule = {
            "type": "PROCESS_GROUP",

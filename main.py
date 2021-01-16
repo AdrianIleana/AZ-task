@@ -5,6 +5,8 @@ if __name__ == '__main__':
 
     mgmtZone = ManagementZones(file)
 
+    file.close()
+
     # Iterate through all the teams defined in yaml file:
     for title in mgmtZone.Teams.keys():
         # Generating payload for each management zone title:
