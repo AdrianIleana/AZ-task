@@ -9,6 +9,7 @@ Python3 CLI-application that can be used to configure, in Dynatrace, Management-
 - Install Requests Package: `pip install requests`
 - Install PyYAML Package: `pip install PyYAML`
 - Dynatrace Tenant with `WriteConfig` and `ReadConfig` permissions assigned to your [API token](https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/)
+- API Token needs to be Base64 encoded and placed in the text file: `encoded_token.txt` (UTF-8 character set)
 - A file `input.yml` in the style of the provided example:
 ```yaml
 environment_id: xhs-3452uu124
@@ -27,9 +28,11 @@ teams:
 ## Instruction on how to use the app:
  First of all double check if you have all the prerequisites required.  
    
- Once you got the repo locally cloned you can run the app by simply executing the `main.py` script.  
-   
- There is no need for parameters as by design the app will look for the config file `input.yml` in the same directory where the script resides.  
+ Once you got the repo locally cloned you can provide your own token and configuration file by updating the files accordingly.  
+ 
+ The app can be executed by simply running the `main.py` script from the Command-Line: `C:\Users\adria\PycharmProjects\AZ-task>py main.py` (on windows)
+ 
+ There is no need for parameters as by design the app will look for the config file `input.yml` and the token `encoded_token.txt` in the same directory where the script resides.  
 
  **Examples:**
  ```cmd
