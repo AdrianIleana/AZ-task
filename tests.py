@@ -1,11 +1,21 @@
 import unittest
 from managementzones import ManagementZones
-import requests
+import yaml
+import base64
 
 
 class TestManagementZones(unittest.TestCase):
     def test_PUT_mz(self):
         file = open("input.yml")
+        file_content = yaml.load(file, Loader=yaml.FullLoader)
+        file.close()
+
+        token_file = open("encoded_token.txt")
+        base64_bytes = token_file.read().encode('ascii')
+        text_to_bytes = base64.b64decode(base64_bytes)
+        token = text_to_bytes.decode('ascii')
+        token_file.close()
+
         test_payload = {
           "name": "Mainframe",
           "rules": [
@@ -32,24 +42,29 @@ class TestManagementZones(unittest.TestCase):
           ]
         }
 
-        mgmt_zone = ManagementZones(file)
-        file.close()
+        mgmt_zone = ManagementZones(file_content, token)
+
         existent = mgmt_zone.exists(test_payload['name'])
 
-        mgmt_zone.put_mz(test_payload, existent['id'])
+        mz_id = existent['id']
+        mgmt_zone.put_mz(test_payload, mz_id)
 
-        response = requests.get(
-            mgmt_zone.URL + "/{}".format(existent['id']),
-            headers=mgmt_zone.header
-        )
-
-        existent = response.json()
+        existent = mgmt_zone.get_mz(mz_id)
 
         for k in test_payload.keys():
             self.assertEqual(test_payload[k], existent[k])
 
     def test_POST_mz(self):
         file = open("input.yml")
+        file_content = yaml.load(file, Loader=yaml.FullLoader)
+        file.close()
+
+        token_file = open("encoded_token.txt")
+        base64_bytes = token_file.read().encode('ascii')
+        text_to_bytes = base64.b64decode(base64_bytes)
+        token = text_to_bytes.decode('ascii')
+        token_file.close()
+
         test_payload = {
           "name": "Mainframe",
           "rules": [
@@ -76,8 +91,8 @@ class TestManagementZones(unittest.TestCase):
           ]
         }
 
-        mgmt_zone = ManagementZones(file)
-        file.close()
+        mgmt_zone = ManagementZones(file_content, token)
+
         zones = mgmt_zone.get_mz()
         before = len(zones['values'])
 

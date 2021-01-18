@@ -1,12 +1,29 @@
 from managementzones import ManagementZones
+import yaml
+import base64
+
+
+# Function for decoding from Base64 format:
+def token_decode(encoded_file):
+    base64_bytes = encoded_file.read().encode('ascii')
+    text_to_bytes = base64.b64decode(base64_bytes)
+    decoded = text_to_bytes.decode('ascii')
+    return decoded
 
 
 if __name__ == '__main__':
+    # Open and read YAML file:
     file = open("input.yml")
-
-    mgmtZone = ManagementZones(file)
-
+    file_content = yaml.load(file, Loader=yaml.FullLoader)
     file.close()
+
+    # Decoding token file:
+    token_file = open("encoded_token.txt")
+    token = token_decode(token_file)
+    token_file.close()
+
+    # Initiating my custom object:
+    mgmtZone = ManagementZones(file_content, token)
 
     # Iterate through all the teams defined in yaml file:
     for title in mgmtZone.Teams.keys():

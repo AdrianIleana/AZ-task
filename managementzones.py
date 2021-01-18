@@ -1,45 +1,43 @@
-import yaml
 import requests
 from requests import HTTPError
-import base64
 
 
 class ManagementZones:
-    def __init__(self, file):
-        self.config = yaml.load(file, Loader=yaml.FullLoader)
+    def __init__(self, file_content, token):
+        self.config = file_content
 
-        self.URL = "https://{}.live.dynatrace.com/api/config/v1/managementZones".format(self.config['tenant_id'])
-
-        # Decoding token file
-        token_file = open("encoded_token.txt")
-        base64_bytes = token_file.read().encode('ascii')
-        message_bytes = base64.b64decode(base64_bytes)
-        self.token = message_bytes.decode('ascii')
-        token_file.close()
+        self.URL = "https://{}.live.dynatrace.com/api/config/v1/managementZones".format(self.config.get('tenant_id'))
 
         self.header_prefix = "Api-token"
 
         self.header = {
-            "Authorization": "{} {}".format(self.header_prefix, self.token),
+            "Authorization": "{} {}".format(self.header_prefix, token),
             "Content-Type": "application/json"
         }
 
         self.Teams = self.config["teams"]
 
     # GET Request function:
-    def get_mz(self):
+    def get_mz(self, mz_id=None):
         zones = dict()
         try:
-            response = requests.get(
-                self.URL,
-                headers=self.header
-            )
+            if mz_id is None:
+                response = requests.get(
+                    self.URL,
+                    headers=self.header
+                )
+            else:
+                response = requests.get(
+                    self.URL + "/{}".format(mz_id),
+                    headers=self.header
+                )
 
             response.raise_for_status()
 
             if response.status_code == 200:
                 print(f"\nGET request status code is: {response.status_code}")
                 zones = response.json()
+            if mz_id is None:
                 print(f"GET retrieved {len(zones['values'])} existing zones.")
         except HTTPError:
             print(f"GET failed with HTTPError: {response.content}\n")
