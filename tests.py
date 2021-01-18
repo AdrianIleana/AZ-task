@@ -2,6 +2,7 @@ import unittest
 from managementzones import ManagementZones
 import requests
 
+
 class TestManagementZones(unittest.TestCase):
     def test_PUT_mz(self):
         file = open("input.yml")
@@ -32,6 +33,7 @@ class TestManagementZones(unittest.TestCase):
         }
 
         mgmt_zone = ManagementZones(file)
+        file.close()
         existent = mgmt_zone.exists(test_payload['name'])
 
         mgmt_zone.put_mz(test_payload, existent['id'])
@@ -45,8 +47,6 @@ class TestManagementZones(unittest.TestCase):
 
         for k in test_payload.keys():
             self.assertEqual(test_payload[k], existent[k])
-
-        file.close()
 
     def test_POST_mz(self):
         file = open("input.yml")
@@ -77,6 +77,7 @@ class TestManagementZones(unittest.TestCase):
         }
 
         mgmt_zone = ManagementZones(file)
+        file.close()
         zones = mgmt_zone.get_mz()
         before = len(zones['values'])
 
@@ -84,8 +85,6 @@ class TestManagementZones(unittest.TestCase):
         zones = mgmt_zone.get_mz()
 
         self.assertEqual(before + 1, len(zones['values']), "Unexpected number of management zones")
-
-        file.close()
 
 
 if __name__ == '__main__':

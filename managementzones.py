@@ -1,6 +1,7 @@
 import yaml
 import requests
 from requests import HTTPError
+import base64
 
 
 class ManagementZones:
@@ -9,7 +10,12 @@ class ManagementZones:
 
         self.URL = "https://{}.live.dynatrace.com/api/config/v1/managementZones".format(self.config['tenant_id'])
 
-        self.token = "9EeXSKQaRFCWKo9WbuUGd"
+        # Decoding token file
+        token_file = open("encoded_token.txt")
+        base64_bytes = token_file.read().encode('ascii')
+        message_bytes = base64.b64decode(base64_bytes)
+        self.token = message_bytes.decode('ascii')
+        token_file.close()
 
         self.header_prefix = "Api-token"
 
@@ -36,9 +42,9 @@ class ManagementZones:
                 zones = response.json()
                 print(f"GET retrieved {len(zones['values'])} existing zones.")
         except HTTPError:
-            print(f"PUT failed with HTTPError: {response.content}\n")
+            print(f"GET failed with HTTPError: {response.content}\n")
         except Exception as e:
-            print(f"PUT failed with exception: {e} \n")
+            print(f"GET failed with exception: {e} \n")
         finally:
             return zones
 
@@ -65,9 +71,9 @@ class ManagementZones:
                 print(f"POST request ran with response code: {post_req.status_code}")
                 print(f"POST request successfully created new management zone: {new_data['name']}")
         except HTTPError:
-            print(f"PUT failed with HTTPError: {response_validator.content}\n")
+            print(f"POST failed with HTTPError: {response_validator.content}\n")
         except Exception as e:
-            print(f"PUT failed with exception: {e} \n")
+            print(f"POST failed with exception: {e} \n")
 
     # PUT Request function:
     def put_mz(self, new_data, mz_id):
@@ -99,9 +105,10 @@ class ManagementZones:
     # Check if existent management zone:
     def exists(self, name):
         zones = self.get_mz()
-        for zone in zones['values']:
-            if zone['name'] == name:
-                return zone
+        if bool(zones):
+            for zone in zones['values']:
+                if zone['name'] == name:
+                    return zone
         return False
 
     # Payload rule generator:

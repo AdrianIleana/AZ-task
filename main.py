@@ -1,5 +1,6 @@
 from managementzones import ManagementZones
 
+
 if __name__ == '__main__':
     file = open("input.yml")
 
@@ -18,10 +19,10 @@ if __name__ == '__main__':
                 rule = mgmtZone.rule_gen(prefix)
                 payload["rules"].append(rule)
 
-        # Checking if management zone already exists:
+        # Retrieving management zone if already exists:
         existent = mgmtZone.exists(title)
 
-        # Initiate request accordingly:
+        # Initiate HTTP request accordingly:
         if existent:
             mgmtZone.put_mz(payload, existent['id'])
         else:
