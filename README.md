@@ -37,7 +37,7 @@ teams:
     C:\Users\adria\PycharmProjects\AZ-task>py main.py
     
     ``` 
-    Be aware that **each execution** will iterate through the `teams` specified in the YAML file and:
+    :warning:Be aware that **each execution** will iterate through the `teams` specified in the YAML file and:
      - if team does not exists already : 
        - **create a new management zone** with the team's title
      - if team exists :
@@ -46,6 +46,7 @@ teams:
   *NOTE: There is no need for parameters as by design the app will look for the config file `input.yml` and the token `encoded_token.txt` in the same directory where the script resides.*
  
  **Examples:**
+ 1. Successfully created 2 new zones `global-pcf-a` and `global-pcf-b`:
  ```cmd
 C:\Users\adria\PycharmProjects\AZ-task>py main.py
 
@@ -61,3 +62,20 @@ POST request successfully created new management zone: global-pcf-b
 
 C:\Users\adria\PycharmProjects\AZ-task>
  ```
+ 2. Successfully created a new zone `global-pcf-a` and updated an existing one `global-pcf-b`:
+ ```cmd
+ 
+C:\Users\adria\PycharmProjects\AZ-task>py main.py
+
+GET request status code is: 200
+GET retrieved 1 existing zones.
+POST request ran with response code: 201
+POST request successfully created new management zone: global-pcf-a
+
+GET request status code is: 200
+GET retrieved 2 existing zones.
+PUT request ran with response code: 204
+PUT request successfully updated management zone: global-pcf-b
+
+C:\Users\adria\PycharmProjects\AZ-task>
+```
