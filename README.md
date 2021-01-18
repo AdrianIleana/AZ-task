@@ -2,7 +2,7 @@
 Dynatrace task repo
 
 ## Overview
-Python3 CLI-application that can be used to configure, in Dynatrace, Management-Zones via the API in a configuration-as-code approach.
+This is a Python3 CLI-application that can be used to configure, in Dynatrace, Management-Zones via the API in a configuration-as-code approach.
 
 ## Requirements:
 - Python 3.9.0 Runtime
@@ -26,20 +26,24 @@ teams:
         entity: ab-3
 ```
 ## Instruction on how to use the app:
- First of all double check if you have all the prerequisites required.  
+ 1. First of all double check if you have all the prerequisites required.  
    
- Once you got the repo locally cloned you can provide your own token and configuration file by updating the files accordingly.  
+ 2. Clone the repo locally
  
- The app can be executed by simply running the `main.py` script from the Command-Line: `C:\Users\adria\PycharmProjects\AZ-task>py main.py` (on windows)
+ 3. Provide your own token and configuration input by updating the files accordingly (`input.yml` and `encoded_token.txt`).
  
- There is no need for parameters as by design the app will look for the config file `input.yml` and the token `encoded_token.txt` in the same directory where the script resides.  
-   
+ 4. Execute the app by simply running the `main.py` script from the Command-Line:  
+    ```
+    C:\Users\adria\PycharmProjects\AZ-task>py main.py
+    
+    ``` 
+    Be aware that **each execution** will iterate through the `teams` specified in the YAML file and:
+     - if team does not exists already : 
+       - **create a new management zone** with the team's title
+     - if team exists :
+       - **update it with the current configuration** (any previous rule will be removed).
  
- Be aware that **each execution** will iterate through the `teams` specified in the YAML file and:
- - if team does not exists already : 
-    - **create a new management zone** with the team's title
- - if team exists :
-    - **update it with the current configuration** (any previous rule will be removed).  
+  *NOTE: There is no need for parameters as by design the app will look for the config file `input.yml` and the token `encoded_token.txt` in the same directory where the script resides.*
  
  **Examples:**
  ```cmd
