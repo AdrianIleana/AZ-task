@@ -33,7 +33,14 @@ teams:
  The app can be executed by simply running the `main.py` script from the Command-Line: `C:\Users\adria\PycharmProjects\AZ-task>py main.py` (on windows)
  
  There is no need for parameters as by design the app will look for the config file `input.yml` and the token `encoded_token.txt` in the same directory where the script resides.  
-
+   
+ 
+ Be aware that **each execution** will iterate through the `teams` specified in the YAML file and:
+ - if team does not exists already : 
+    - **create a new management zone** with the team's title
+ - if team exists :
+    - **update it with the current configuration** (any previous rule will be removed).  
+ 
  **Examples:**
  ```cmd
 C:\Users\adria\PycharmProjects\AZ-task>py main.py
