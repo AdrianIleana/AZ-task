@@ -6,7 +6,7 @@ class ManagementZones:
     def __init__(self, file_content, token):
         self.config = file_content
 
-        self.URL = "https://{}.live.dynatrace.com/api/config/v1/managementZones".format(self.config.get('tenant_id'))
+        self.URL = "https://{}.live.dynatrace.com/api/config/v1/managementZones".format(self.config['tenant_id'])
 
         self.header_prefix = "Api-token"
 
@@ -104,10 +104,13 @@ class ManagementZones:
     def exists(self, name):
         zones = self.get_mz()
         if bool(zones):
-            for zone in zones['values']:
-                if zone['name'] == name:
-                    return zone
-        return False
+            if bool(zones['values']):
+                for zone in zones['values']:
+                    if zone['name'] == name:
+                        return zone
+            else:
+                return zones
+        return zones
 
     # Payload rule generator:
     def rule_gen(self, prefix):
