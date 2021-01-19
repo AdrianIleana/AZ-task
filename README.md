@@ -9,7 +9,18 @@ This is a Python3 CLI-application that can be used to configure, in Dynatrace, M
 - Install Requests Package: `pip install requests`
 - Install PyYAML Package: `pip install PyYAML`
 - Dynatrace Tenant with `WriteConfig` and `ReadConfig` permissions assigned to your [API token](https://www.dynatrace.com/support/help/dynatrace-api/basics/dynatrace-api-authentication/)
-- API Token needs to be Base64 encoded and placed in the text file: `encoded_token.txt` (UTF-8 character set)
+- API Token needs to be Base64 encoded and placed in the text file: `encoded_token.txt` (UTF-8 character set)  
+    - Short set of instructions to encode your API Token string (replace the token and just run the code in a Python3.9 shell):
+```python
+import base64
+
+token = "replace_this_with_your_token"
+token_bytes = token.encode('utf-8')
+base64_bytes = base64.b64encode(token_bytes)
+encoded_token = base64_bytes.decode('ascii')
+
+print(encoded_token)
+```
 - A file `input.yml` in the style of the provided example:
 ```yaml
 environment_id: xhs-3452uu124
@@ -47,6 +58,7 @@ teams:
  
  **Examples:**
  1. Successfully created 2 new zones `global-pcf-a` and `global-pcf-b`:
+ 
  ```cmd
 C:\Users\adria\PycharmProjects\AZ-task>py main.py
 
@@ -61,8 +73,10 @@ POST request ran with response code: 201
 POST request successfully created new management zone: global-pcf-b
 
 C:\Users\adria\PycharmProjects\AZ-task>
- ```
+ ```  
+ 
  2. Successfully created a new zone `global-pcf-a` and updated an existing one `global-pcf-b`:
+ 
  ```cmd
  
 C:\Users\adria\PycharmProjects\AZ-task>py main.py
