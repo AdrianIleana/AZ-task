@@ -1,5 +1,5 @@
 environment_id: xhs-3452uu124
-tenant_id: anu85007
+tenant_id: <your_tenant_id>
 teams:
     global-pcf-a:
         cost-center: ct-4291
