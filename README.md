@@ -17,14 +17,14 @@ import base64
 token = "replace_this_with_your_token"
 token_bytes = token.encode('utf-8')
 base64_bytes = base64.b64encode(token_bytes)
-encoded_token = base64_bytes.decode('ascii')
+encoded_token = base64_bytes.decode('utf-8')
 
 print(encoded_token)
 ```
 - A file `input.yml` in the style of the provided example:
 ```yaml
 environment_id: xhs-3452uu124
-tenant_id: anu85007
+tenant_id: <your_tenant_id>
 teams:
     global-pcf-a:
         cost-center: ct-4291
